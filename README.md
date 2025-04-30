@@ -37,8 +37,8 @@ We test our codes under the following environment:
 
 3. Clone this repository.
 
-  - `git clone https://github.com/OpenRobotLab/HIMLoco.git`
-  - `cd HIMLoco`
+  - `git clone https://github.com/dancher00/him-humanoid-h1.git`
+  - `cd him-humanoid-h1`
 
 
 4. Install HIMLoco.
