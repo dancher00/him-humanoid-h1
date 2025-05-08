@@ -155,9 +155,9 @@ class H1RoughCfg( LeggedRobotCfg ):
             dof_vel = -5.e-3
             ang_vel_xy = 0.0 
             feet_contact_forces = -0.
-            hip_symmetry = 2.
+            # hip_symmetry = 2.
             action_rate = -0.0001
-            lin_vel_y = -1.
+            # lin_vel_y = -1.
             #lin_vel_x = 1.
 
 
