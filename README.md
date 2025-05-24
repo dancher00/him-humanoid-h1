@@ -1,6 +1,7 @@
-### Installation
+## Demo
 
 ![Demo](h1.gif)
+
 ![Plots](plots.png)
 
 We test our codes under the following environment:
