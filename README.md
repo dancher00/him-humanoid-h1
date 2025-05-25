@@ -1,6 +1,6 @@
 ## Demo
 
-![descr](h1.png)
+![descr](him_h1.png)
 
 ![Demo](h1.gif)
 
