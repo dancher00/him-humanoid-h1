@@ -2,6 +2,7 @@
 
 ![descr](him_h1.png)
 
+Demo locomotion after 1000 epos:
 ![Demo](h1.gif)
 
 ![Plots](plots.png)
