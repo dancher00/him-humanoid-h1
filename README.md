@@ -15,6 +15,7 @@ We test our codes under the following environment:
 - Python 3.7.16
 - PyTorch 1.10.0+cu113
 - Isaac Gym: Preview 4
+- 4090
 
 1. Create an environment and install PyTorch:
 
