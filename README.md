@@ -1,51 +1,77 @@
-## Demo
+# HIM locomotion for Unitree H1
 
-![descr](him_h1.png)
+Adaptation of [HIMLoco](https://github.com/InternRobotics/HIMLoco) to the Unitree H1 humanoid in Isaac Gym. This repository provides the H1 task configuration, training and playback scripts, and simulation demonstrations.
 
-Demo locomotion after 1000 epos:
-![Demo](h1.gif)
+The work focuses on locomotion using joint-encoder and IMU observations. The original Hybrid Internal Model method and its learning infrastructure come from HIMLoco; this fork applies that infrastructure to a humanoid robot.
 
-![Plots](plots.png)
+## Demonstration
 
-We test our codes under the following environment:
+![Unitree H1 locomotion in Isaac Gym](h1.gif)
 
-- Ubuntu 20.04
-- NVIDIA Driver: 525.147.05
-- CUDA 12.0
-- Python 3.7.16
-- PyTorch 1.10.0+cu113
-- Isaac Gym: Preview 4
-- 4090
+[Configuration illustration](him_h1.png) · [Training plots](plots.png)
 
-1. Create an environment and install PyTorch:
+These artifacts document simulation experiments. They do not establish hardware deployment or a numerical improvement over a baseline.
 
-  - `conda create -n himloco python=3.7.16`
-  - `conda activate himloco`
-  - `pip3 install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html`
+## H1 adaptation
 
-2. Install Isaac Gym:
-  - Download and install Isaac Gym Preview 4 from https://developer.nvidia.com/isaac-gym
-  - `cd isaacgym/python && pip install -e .`
+| Component | Implementation |
+| --- | --- |
+| Robot configuration | [h1_config.py](legged_gym/legged_gym/envs/h1/h1_config.py): H1 asset, initial joint pose, PD gains, action scaling, contact settings, and reward weights |
+| Task registration | [envs/__init__.py](legged_gym/legged_gym/envs/__init__.py): the `h1` task uses `LeggedRobot` with `H1RoughCfg` and `H1RoughCfgPPO` |
+| Robot assets | [H1 model](legged_gym/resources/robots/h1) |
+| Learning infrastructure | [rsl_rl](rsl_rl), including the HIM policy and PPO implementation |
+| Training and export | [train.py](legged_gym/legged_gym/scripts/train.py) and [play.py](legged_gym/legged_gym/scripts/play.py) |
 
-3. Clone this repository.
+The H1 configuration specifies 4,096 parallel environments, 10 policy actions, and the `rough_h1` experiment name. Use the versions of `legged_gym` and `rsl_rl` included in this repository.
 
-  - `git clone https://github.com/dancher00/him-humanoid-h1.git`
-  - `cd him-humanoid-h1`
+## Environment
 
+The original experiments used Ubuntu 20.04, Python 3.7.16, PyTorch 1.10.0+cu113, Isaac Gym Preview 4, and an RTX 4090. The recorded host configuration used NVIDIA driver 525.147.05 and CUDA 12.0; the PyTorch package itself uses CUDA 11.3.
 
-4. Install HIMLoco.
-  - `cd rsl_rl && pip install -e .`
-  - `cd ../legged_gym && pip install -e .`
+This is a historical Isaac Gym environment. Compatibility with newer Python, PyTorch, or Isaac Lab versions has not been established.
 
-**Note:** Please use legged_gym and rsl_rl provided in this repo, we have modefications on these repos.
+## Installation
 
-### Tutorial
+Create the environment:
 
-1. Train a policy:
+```bash
+conda create -n himloco python=3.7.16
+conda activate himloco
+python -m pip install torch==1.10.0+cu113 torchvision==0.11.1+cu113 torchaudio==0.10.0+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
+```
 
-  - `cd legged_gym/legged_gym/scripts`
-  - `python train.py --task=h1`
+Download [Isaac Gym Preview 4](https://developer.nvidia.com/isaac-gym), then install its Python package from the extracted directory:
 
-2. Play and export the latest policy:
-  - `cd legged_gym/legged_gym/scripts`
-  - `python play.py --task=h1`
+```bash
+python -m pip install -e /path/to/isaacgym/python
+```
+
+Install this fork from its repository root:
+
+```bash
+git clone https://github.com/dancher00/him-humanoid-h1.git
+cd him-humanoid-h1
+python -m pip install -e rsl_rl
+python -m pip install -e legged_gym
+```
+
+## Train, play, and export
+
+From the repository root:
+
+```bash
+cd legged_gym/legged_gym/scripts
+python train.py --task=h1
+```
+
+From the same scripts directory, play and export a trained policy:
+
+```bash
+python play.py --task=h1
+```
+
+Playback resumes a checkpoint from `legged_gym/logs/rough_h1`; train a policy or supply a compatible checkpoint first. The playback script enables policy export to `legged_gym/logs/rough_h1/exported/policies`.
+
+## Attribution
+
+HIM is the method introduced by the [upstream HIMLoco authors](https://github.com/InternRobotics/HIMLoco). This repository retains their learning infrastructure and license notices. See the [upstream project documentation](projects/himloco/README.md) for the method and citation.
